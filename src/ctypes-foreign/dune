@@ -30,4 +30,9 @@
 (rule
  (targets c_flags c_flags.sexp c_library_flags.sexp backend.sexp)
  (action
-  (run ./config/discover.exe)))
+  (run
+   ./config/discover.exe
+   -context_name
+   %{context_name}
+   -ccomp_type
+   %{ocaml-config:ccomp_type})))

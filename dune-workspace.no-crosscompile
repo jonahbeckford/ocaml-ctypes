@@ -1,0 +1,6 @@
+(lang dune 2.9)
+; In situations where dune-workspace is present with one or more
+; cross-compiling contexts, we need a way to run the tests
+; only in the default context. This Dune workspace file can do
+; that.
+(context default)

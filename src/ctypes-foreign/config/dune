@@ -1,7 +1,7 @@
 (executable
  (name discover)
  (modules discover)
- (libraries dune-configurator))
+ (libraries dune-configurator dkml-c-probe))
 
 (executable
  (name gen_libffi_abi)
