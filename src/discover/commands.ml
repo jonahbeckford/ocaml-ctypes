@@ -61,6 +61,11 @@ let shell_command_results command =
        let status = Sys.command full_command in
        let stdout = file_contents stdout_filename in
        let stderr = file_contents stderr_filename in
+       Format.eprintf "@.[shell_command_results]@.";
+       Format.eprintf "full_command = %s@." full_command;
+       Format.eprintf "status = %d@." status;
+       Format.eprintf "stdout = %s@." stdout;
+       Format.eprintf "stderr = %s@." stderr;
        { status; stdout; stderr }
     ) ()
     ~cleanup:begin fun () ->
