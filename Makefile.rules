@@ -64,11 +64,12 @@ XEN_CFLAGS=$(if $(XEN_LIB), \
         $(CFLAGS) -DMINIOS $(shell env PKG_CONFIG_PATH="$(OPAM_PREFIX)/lib/pkgconfig" \
                                        pkg-config --cflags mirage-xen) -fno-builtin)
 
+STDLIB:=$(shell $(OCAMLFIND) ocamlc -config | awk '/^standard_library:/{print $$2}' | tr '\\' '/')
 CMO_OPTS = $($(PROJECT).cmo_opts)
 CMX_OPTS = $($(PROJECT).cmx_opts)
 CMI_OPTS = $($(PROJECT).cmi_opts)
 ifeq ($(CCOMP_TYPE),msvc)
-CMA_OPTS = $(if $(C_OBJECTS),-cclib lib$(PROJECT)_stubs.lib -dllib dll$(PROJECT)_stubs.dll) \
+CMA_OPTS = $(if $(C_OBJECTS),-cclib "-L$(STDLIB)/../ctypes" -cclib lib$(PROJECT)_stubs.lib -dllib dll$(PROJECT)_stubs.dll) \
            $(foreach libdep,$($(PROJECT).linkdeps),\
              -cclib lib$(libdep).lib -dllib dll$(libdep).dll)
 else
@@ -80,7 +81,7 @@ SUBPROJECT_DEPS = $($(PROJECT).subproject_deps)
 LOCAL_CMXAS = $(SUBPROJECT_DEPS:%=$(BUILDDIR)/%.cmxa)
 LOCAL_CMAS = $(SUBPROJECT_DEPS:%=$(BUILDDIR)/%.cma)
 ifeq ($(CCOMP_TYPE),msvc)
-CMXA_OPTS = $(if $(C_OBJECTS),-cclib lib$(PROJECT)_stubs.lib)\
+CMXA_OPTS = $(if $(C_OBJECTS),-cclib "-L$(STDLIB)/../ctypes" -cclib lib$(PROJECT)_stubs.lib)\
            $(foreach libdep,$($(PROJECT).linkdeps),\
              -cclib lib$(libdep).lib)
 else
